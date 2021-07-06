@@ -31,6 +31,7 @@ import org.apache.avro.generic.GenericData.EnumSymbol;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.io.*;
+import org.apache.avro.util.Either;
 import org.apache.avro.util.Utf8;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -373,16 +374,16 @@ public class TestSchemaCompatibility {
       // best-effort!
 
       new DecodingTestCase(ENUM1_AB_SCHEMA, new EnumSymbol(ENUM1_AB_SCHEMA, "A"), ENUM1_ABC_SCHEMA,
-          new EnumSymbol(ENUM1_ABC_SCHEMA, "A")),
+          Either.ofLeft(new EnumSymbol(ENUM1_ABC_SCHEMA, "A"))),
 
       new DecodingTestCase(ENUM1_ABC_SCHEMA, new EnumSymbol(ENUM1_ABC_SCHEMA, "A"), ENUM1_AB_SCHEMA,
-          new EnumSymbol(ENUM1_AB_SCHEMA, "A")),
+          Either.ofLeft(new EnumSymbol(ENUM1_AB_SCHEMA, "A"))),
 
       new DecodingTestCase(ENUM1_ABC_SCHEMA, new EnumSymbol(ENUM1_ABC_SCHEMA, "B"), ENUM1_BC_SCHEMA,
-          new EnumSymbol(ENUM1_BC_SCHEMA, "B")),
+          Either.ofLeft(new EnumSymbol(ENUM1_BC_SCHEMA, "B"))),
 
       new DecodingTestCase(ENUM_ABC_ENUM_DEFAULT_A_SCHEMA, new EnumSymbol(ENUM_ABC_ENUM_DEFAULT_A_SCHEMA, "C"),
-          ENUM_AB_ENUM_DEFAULT_A_SCHEMA, new EnumSymbol(ENUM_AB_ENUM_DEFAULT_A_SCHEMA, "A")),
+          ENUM_AB_ENUM_DEFAULT_A_SCHEMA, Either.ofLeft(new EnumSymbol(ENUM_AB_ENUM_DEFAULT_A_SCHEMA, "A"))),
 
       new DecodingTestCase(INT_STRING_UNION_SCHEMA, "the string", STRING_SCHEMA, new Utf8("the string")),
 

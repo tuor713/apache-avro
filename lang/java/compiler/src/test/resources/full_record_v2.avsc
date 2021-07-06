@@ -24,6 +24,13 @@
   }, {
     "name" : "h",
     "type" : "bytes"
+  }, {
+    "name": "enumField",
+    "type": {
+      "type": "enum",
+      "name": "TestEnum",
+      "symbols": ["A", "B", "C"]
+    }
   } ]
 }
 

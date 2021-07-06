@@ -28,6 +28,7 @@
   </parent>
 
   <artifactId>avro-compiler</artifactId>
+  <version>1.10.2-enum</version>
 
   <name>Apache Avro Compiler</name>
   <packaging>bundle</packaging>

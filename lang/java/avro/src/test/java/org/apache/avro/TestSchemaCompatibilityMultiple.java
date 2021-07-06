@@ -97,19 +97,18 @@ public class TestSchemaCompatibilityMultiple {
         // EOR
         .endRecord();
 
-    List<SchemaIncompatibilityType> types = Arrays.asList(SchemaIncompatibilityType.MISSING_ENUM_SYMBOLS,
-        SchemaIncompatibilityType.NAME_MISMATCH, SchemaIncompatibilityType.TYPE_MISMATCH,
-        SchemaIncompatibilityType.READER_FIELD_MISSING_DEFAULT_VALUE, SchemaIncompatibilityType.FIXED_SIZE_MISMATCH,
+    List<SchemaIncompatibilityType> types = Arrays.asList(SchemaIncompatibilityType.NAME_MISMATCH,
+        SchemaIncompatibilityType.TYPE_MISMATCH, SchemaIncompatibilityType.READER_FIELD_MISSING_DEFAULT_VALUE,
+        SchemaIncompatibilityType.FIXED_SIZE_MISMATCH, SchemaIncompatibilityType.MISSING_UNION_BRANCH,
         SchemaIncompatibilityType.MISSING_UNION_BRANCH, SchemaIncompatibilityType.MISSING_UNION_BRANCH,
-        SchemaIncompatibilityType.MISSING_UNION_BRANCH, SchemaIncompatibilityType.TYPE_MISMATCH);
-    List<String> details = Arrays.asList("[B, D]", "expected: check_enum_name_type_ERR",
+        SchemaIncompatibilityType.TYPE_MISMATCH);
+    List<String> details = Arrays.asList("expected: check_enum_name_type_ERR",
         "reader type: STRING not compatible with writer type: LONG", "extra_no_default_field", "expected: 8, found: 4",
         "reader union lacking writer type: DOUBLE", "reader union lacking writer type: STRING",
         "reader union lacking writer type: LONG", "reader type: STRING not compatible with writer type: BOOLEAN");
-    List<String> location = Arrays.asList("/fields/0/type/symbols", "/fields/1/type/name", "/fields/2/type",
-        "/fields/3/type/fields/1", "/fields/3/type/fields/2/type/size", "/fields/3/type/fields/3/type/1",
-        "/fields/3/type/fields/3/type/2", "/fields/3/type/fields/4/type",
-        "/fields/3/type/fields/5/type/fields/1/type/items");
+    List<String> location = Arrays.asList("/fields/1/type/name", "/fields/2/type", "/fields/3/type/fields/1",
+        "/fields/3/type/fields/2/type/size", "/fields/3/type/fields/3/type/1", "/fields/3/type/fields/3/type/2",
+        "/fields/3/type/fields/4/type", "/fields/3/type/fields/5/type/fields/1/type/items");
 
     validateIncompatibleSchemas(reader, writer, types, details, location);
   }

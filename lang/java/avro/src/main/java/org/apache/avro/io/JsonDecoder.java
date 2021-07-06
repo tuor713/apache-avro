@@ -32,6 +32,7 @@ import org.apache.avro.Schema;
 import org.apache.avro.io.parsing.JsonGrammarGenerator;
 import org.apache.avro.io.parsing.Parser;
 import org.apache.avro.io.parsing.Symbol;
+import org.apache.avro.util.Either;
 import org.apache.avro.util.Utf8;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
@@ -86,7 +87,7 @@ public class JsonDecoder extends ParsingDecoder implements Parser.ActionHandler 
    * <p/>
    * Otherwise, this JsonDecoder will reset its state and then reconfigure its
    * input.
-   * 
+   *
    * @param in The InputStream to read from. Cannot be null.
    * @throws IOException
    * @throws NullPointerException if {@code in} is {@code null}
@@ -109,7 +110,7 @@ public class JsonDecoder extends ParsingDecoder implements Parser.ActionHandler 
    * <p/>
    * Otherwise, this JsonDecoder will reset its state and then reconfigure its
    * input.
-   * 
+   *
    * @param in The String to read from. Cannot be null.
    * @throws IOException
    * @throws NullPointerException if {@code in} is {@code null}
@@ -318,7 +319,7 @@ public class JsonDecoder extends ParsingDecoder implements Parser.ActionHandler 
   }
 
   @Override
-  public int readEnum() throws IOException {
+  public Either<Integer, String> readEnum() throws IOException {
     advance(Symbol.ENUM);
     Symbol.EnumLabelsAction top = (Symbol.EnumLabelsAction) parser.popSymbol();
     if (in.getCurrentToken() == JsonToken.VALUE_STRING) {
@@ -326,9 +327,9 @@ public class JsonDecoder extends ParsingDecoder implements Parser.ActionHandler 
       int n = top.findLabel(in.getText());
       if (n >= 0) {
         in.nextToken();
-        return n;
+        return Either.ofLeft(n);
       }
-      throw new AvroTypeException("Unknown symbol in enum " + in.getText());
+      return Either.ofRight(in.getText());
     } else {
       throw error("fixed");
     }

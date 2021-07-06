@@ -35,6 +35,7 @@ import org.apache.avro.Schema.Field;
 import org.apache.avro.UnresolvedUnionException;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.Encoder;
+import org.apache.avro.util.Either;
 
 /** {@link DatumWriter} for generic Java objects. */
 public class GenericDatumWriter<D> implements DatumWriter<D> {
@@ -237,9 +238,18 @@ public class GenericDatumWriter<D> implements DatumWriter<D> {
    * representations.
    */
   protected void writeEnum(Schema schema, Object datum, Encoder out) throws IOException {
-    if (!data.isEnum(datum))
-      throw new AvroTypeException("Not an enum: " + datum + " for schema: " + schema);
-    out.writeEnum(schema.getEnumOrdinal(datum.toString()));
+    if (datum instanceof Either) {
+      Either edatum = (Either) datum;
+      if (edatum.isLeft()) {
+        this.writeEnum(schema, edatum.getLeft(), out);
+      } else {
+        throw new AvroTypeException("Cannot write an either of right type: " + datum + " for schema: " + schema);
+      }
+    } else {
+      if (!data.isEnum(datum))
+        throw new AvroTypeException("Not an enum: " + datum + " for schema: " + schema);
+      out.writeEnum(schema.getEnumOrdinal(datum.toString()));
+    }
   }
 
   /**

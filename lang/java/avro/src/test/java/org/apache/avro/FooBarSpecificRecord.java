@@ -25,6 +25,7 @@ import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.SchemaStore;
 import org.apache.avro.specific.SpecificData;
+import org.apache.avro.util.Either;
 
 @org.apache.avro.specific.AvroGenerated
 public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecordBase
@@ -45,7 +46,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
-   * 
+   *
    * @return the message decoder used by this class
    */
   public static BinaryMessageDecoder<FooBarSpecificRecord> getDecoder() {
@@ -55,7 +56,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
   /**
    * Create a new BinaryMessageDecoder instance for this class that uses the
    * specified {@link SchemaStore}.
-   * 
+   *
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    * @return a BinaryMessageDecoder instance for this class backed by the given
    *         SchemaStore
@@ -66,7 +67,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Serializes this FooBarSpecificRecord to a ByteBuffer.
-   * 
+   *
    * @return a buffer holding the serialized data for this instance
    * @throws java.io.IOException if this instance could not be serialized
    */
@@ -76,7 +77,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Deserializes a FooBarSpecificRecord from a ByteBuffer.
-   * 
+   *
    * @param b a byte buffer holding serialized data for an instance of this class
    * @return a FooBarSpecificRecord instance decoded from the given buffer
    * @throws java.io.IOException if the given bytes could not be deserialized into
@@ -95,7 +96,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
   @Deprecated
   public java.util.List<java.lang.Integer> relatedids;
   @Deprecated
-  public org.apache.avro.TypeEnum typeEnum;
+  public Either<TypeEnum, String> typeEnum;
 
   /**
    * Default constructor. Note that this does not initialize fields to their
@@ -107,7 +108,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * All-args constructor.
-   * 
+   *
    * @param id         The new value for id
    * @param name       The new value for name
    * @param nicknames  The new value for nicknames
@@ -120,7 +121,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
     this.name = name;
     this.nicknames = nicknames;
     this.relatedids = relatedids;
-    this.typeEnum = typeEnum;
+    this.typeEnum = Either.ofLeft(typeEnum);
   }
 
   @Override
@@ -165,7 +166,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
       relatedids = (java.util.List<java.lang.Integer>) value$;
       break;
     case 4:
-      typeEnum = (org.apache.avro.TypeEnum) value$;
+      typeEnum = (Either<TypeEnum, String>) value$;
       break;
     default:
       throw new org.apache.avro.AvroRuntimeException("Bad index");
@@ -174,7 +175,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Gets the value of the 'id' field.
-   * 
+   *
    * @return The value of the 'id' field.
    */
   public java.lang.Integer getId() {
@@ -183,7 +184,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Sets the value of the 'id' field.
-   * 
+   *
    * @param value the value to set.
    */
   public void setId(java.lang.Integer value) {
@@ -192,7 +193,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Gets the value of the 'name' field.
-   * 
+   *
    * @return The value of the 'name' field.
    */
   public java.lang.String getName() {
@@ -201,7 +202,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Sets the value of the 'name' field.
-   * 
+   *
    * @param value the value to set.
    */
   public void setName(java.lang.String value) {
@@ -210,7 +211,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Gets the value of the 'nicknames' field.
-   * 
+   *
    * @return The value of the 'nicknames' field.
    */
   public java.util.List<java.lang.String> getNicknames() {
@@ -219,7 +220,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Sets the value of the 'nicknames' field.
-   * 
+   *
    * @param value the value to set.
    */
   public void setNicknames(java.util.List<java.lang.String> value) {
@@ -228,7 +229,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Gets the value of the 'relatedids' field.
-   * 
+   *
    * @return The value of the 'relatedids' field.
    */
   public java.util.List<java.lang.Integer> getRelatedids() {
@@ -237,7 +238,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Sets the value of the 'relatedids' field.
-   * 
+   *
    * @param value the value to set.
    */
   public void setRelatedids(java.util.List<java.lang.Integer> value) {
@@ -246,25 +247,25 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
   /**
    * Gets the value of the 'typeEnum' field.
-   * 
+   *
    * @return The value of the 'typeEnum' field.
    */
-  public org.apache.avro.TypeEnum getTypeEnum() {
+  public Either<TypeEnum, String> getTypeEnum() {
     return typeEnum;
   }
 
   /**
    * Sets the value of the 'typeEnum' field.
-   * 
+   *
    * @param value the value to set.
    */
   public void setTypeEnum(org.apache.avro.TypeEnum value) {
-    this.typeEnum = value;
+    this.typeEnum = Either.ofLeft(value);
   }
 
   /**
    * Creates a new FooBarSpecificRecord RecordBuilder.
-   * 
+   *
    * @return A new FooBarSpecificRecord RecordBuilder
    */
   public static org.apache.avro.FooBarSpecificRecord.Builder newBuilder() {
@@ -274,7 +275,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
   /**
    * Creates a new FooBarSpecificRecord RecordBuilder by copying an existing
    * Builder.
-   * 
+   *
    * @param other The existing builder to copy.
    * @return A new FooBarSpecificRecord RecordBuilder
    */
@@ -290,7 +291,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
   /**
    * Creates a new FooBarSpecificRecord RecordBuilder by copying an existing
    * FooBarSpecificRecord instance.
-   * 
+   *
    * @param other The existing instance to copy.
    * @return A new FooBarSpecificRecord RecordBuilder
    */
@@ -312,7 +313,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
     private java.lang.String name;
     private java.util.List<java.lang.String> nicknames;
     private java.util.List<java.lang.Integer> relatedids;
-    private org.apache.avro.TypeEnum typeEnum;
+    private Either<org.apache.avro.TypeEnum, String> typeEnum;
 
     /** Creates a new Builder */
     private Builder() {
@@ -321,7 +322,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Creates a Builder by copying an existing Builder.
-     * 
+     *
      * @param other The existing Builder to copy.
      */
     private Builder(org.apache.avro.FooBarSpecificRecord.Builder other) {
@@ -350,7 +351,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Creates a Builder by copying an existing FooBarSpecificRecord instance
-     * 
+     *
      * @param other The existing instance to copy.
      */
     private Builder(org.apache.avro.FooBarSpecificRecord other) {
@@ -379,7 +380,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Gets the value of the 'id' field.
-     * 
+     *
      * @return The value.
      */
     public java.lang.Integer getId() {
@@ -388,7 +389,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Sets the value of the 'id' field.
-     * 
+     *
      * @param value The value of 'id'.
      * @return This builder.
      */
@@ -401,7 +402,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Checks whether the 'id' field has been set.
-     * 
+     *
      * @return True if the 'id' field has been set, false otherwise.
      */
     public boolean hasId() {
@@ -410,7 +411,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Clears the value of the 'id' field.
-     * 
+     *
      * @return This builder.
      */
     public org.apache.avro.FooBarSpecificRecord.Builder clearId() {
@@ -420,7 +421,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Gets the value of the 'name' field.
-     * 
+     *
      * @return The value.
      */
     public java.lang.String getName() {
@@ -429,7 +430,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Sets the value of the 'name' field.
-     * 
+     *
      * @param value The value of 'name'.
      * @return This builder.
      */
@@ -442,7 +443,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Checks whether the 'name' field has been set.
-     * 
+     *
      * @return True if the 'name' field has been set, false otherwise.
      */
     public boolean hasName() {
@@ -451,7 +452,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Clears the value of the 'name' field.
-     * 
+     *
      * @return This builder.
      */
     public org.apache.avro.FooBarSpecificRecord.Builder clearName() {
@@ -462,7 +463,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Gets the value of the 'nicknames' field.
-     * 
+     *
      * @return The value.
      */
     public java.util.List<java.lang.String> getNicknames() {
@@ -471,7 +472,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Sets the value of the 'nicknames' field.
-     * 
+     *
      * @param value The value of 'nicknames'.
      * @return This builder.
      */
@@ -484,7 +485,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Checks whether the 'nicknames' field has been set.
-     * 
+     *
      * @return True if the 'nicknames' field has been set, false otherwise.
      */
     public boolean hasNicknames() {
@@ -493,7 +494,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Clears the value of the 'nicknames' field.
-     * 
+     *
      * @return This builder.
      */
     public org.apache.avro.FooBarSpecificRecord.Builder clearNicknames() {
@@ -504,7 +505,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Gets the value of the 'relatedids' field.
-     * 
+     *
      * @return The value.
      */
     public java.util.List<java.lang.Integer> getRelatedids() {
@@ -513,7 +514,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Sets the value of the 'relatedids' field.
-     * 
+     *
      * @param value The value of 'relatedids'.
      * @return This builder.
      */
@@ -526,7 +527,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Checks whether the 'relatedids' field has been set.
-     * 
+     *
      * @return True if the 'relatedids' field has been set, false otherwise.
      */
     public boolean hasRelatedids() {
@@ -535,7 +536,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Clears the value of the 'relatedids' field.
-     * 
+     *
      * @return This builder.
      */
     public org.apache.avro.FooBarSpecificRecord.Builder clearRelatedids() {
@@ -546,29 +547,29 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Gets the value of the 'typeEnum' field.
-     * 
+     *
      * @return The value.
      */
-    public org.apache.avro.TypeEnum getTypeEnum() {
+    public Either<TypeEnum, String> getTypeEnum() {
       return typeEnum;
     }
 
     /**
      * Sets the value of the 'typeEnum' field.
-     * 
+     *
      * @param value The value of 'typeEnum'.
      * @return This builder.
      */
     public org.apache.avro.FooBarSpecificRecord.Builder setTypeEnum(org.apache.avro.TypeEnum value) {
       validate(fields()[4], value);
-      this.typeEnum = value;
+      this.typeEnum = Either.ofLeft(value);
       fieldSetFlags()[4] = true;
       return this;
     }
 
     /**
      * Checks whether the 'typeEnum' field has been set.
-     * 
+     *
      * @return True if the 'typeEnum' field has been set, false otherwise.
      */
     public boolean hasTypeEnum() {
@@ -577,7 +578,7 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
 
     /**
      * Clears the value of the 'typeEnum' field.
-     * 
+     *
      * @return This builder.
      */
     public org.apache.avro.FooBarSpecificRecord.Builder clearTypeEnum() {
@@ -597,7 +598,8 @@ public class FooBarSpecificRecord extends org.apache.avro.specific.SpecificRecor
             : (java.util.List<java.lang.String>) defaultValue(fields()[2]);
         record.relatedids = fieldSetFlags()[3] ? this.relatedids
             : (java.util.List<java.lang.Integer>) defaultValue(fields()[3]);
-        record.typeEnum = fieldSetFlags()[4] ? this.typeEnum : (org.apache.avro.TypeEnum) defaultValue(fields()[4]);
+        record.typeEnum = fieldSetFlags()[4] ? this.typeEnum
+            : Either.ofLeft((org.apache.avro.TypeEnum) defaultValue(fields()[4]));
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;

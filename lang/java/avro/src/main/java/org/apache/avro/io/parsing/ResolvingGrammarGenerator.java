@@ -123,7 +123,7 @@ public class ResolvingGrammarGenerator extends ValidatingGrammarGenerator {
       Object[] adjs = new Object[e.adjustments.length];
       for (int i = 0; i < adjs.length; i++) {
         adjs[i] = (0 <= e.adjustments[i] ? new Integer(e.adjustments[i])
-            : "No match for " + e.writer.getEnumSymbols().get(i));
+            : String.valueOf(e.writer.getEnumSymbols().get(i)));
       }
       return Symbol.seq(Symbol.enumAdjustAction(e.reader.getEnumSymbols().size(), adjs), Symbol.ENUM);
 

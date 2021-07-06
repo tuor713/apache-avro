@@ -705,8 +705,8 @@ public class TestSchemaBuilder {
     Assert.assertArrayEquals(bytedef, ((GenericData.Fixed) newRec.get("fixedF2")).bytes());
     Assert.assertArrayEquals(bytedef, ((GenericData.Fixed) newRec.get("fixedF3")).bytes());
     Assert.assertArrayEquals(bytedef, ((GenericData.Fixed) newRec.get("fixedU")).bytes());
-    Assert.assertEquals("S", newRec.get("enumF").toString());
-    Assert.assertEquals("SS", newRec.get("enumU").toString());
+    Assert.assertEquals("Left{S}", newRec.get("enumF").toString());
+    Assert.assertEquals("Left{SS}", newRec.get("enumU").toString());
     @SuppressWarnings("unchecked")
     Map<CharSequence, CharSequence> map = (Map<CharSequence, CharSequence>) newRec.get("mapF");
     Assert.assertEquals(mapdef.size(), map.size());
@@ -723,7 +723,7 @@ public class TestSchemaBuilder {
     Assert.assertEquals(newRec.get("arrayF"), newRec.get("arrayU"));
     Assert.assertEquals(recdef, newRec.get("recordF"));
     Assert.assertEquals(recdef2, newRec.get("recordU"));
-    Assert.assertEquals("S", newRec.get("byName").toString());
+    Assert.assertEquals("Left{S}", newRec.get("byName").toString());
   }
 
   @Test(expected = SchemaBuilderException.class)

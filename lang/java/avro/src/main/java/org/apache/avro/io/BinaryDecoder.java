@@ -26,6 +26,7 @@ import java.util.Arrays;
 
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.InvalidNumberEncodingException;
+import org.apache.avro.util.Either;
 import org.apache.avro.util.Utf8;
 import org.slf4j.LoggerFactory;
 
@@ -367,8 +368,8 @@ public class BinaryDecoder extends Decoder {
   }
 
   @Override
-  public int readEnum() throws IOException {
-    return readInt();
+  public Either<Integer, String> readEnum() throws IOException {
+    return Either.ofLeft(readInt());
   }
 
   protected void doSkipBytes(long length) throws IOException {

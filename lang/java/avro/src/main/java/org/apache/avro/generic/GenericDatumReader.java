@@ -36,6 +36,7 @@ import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.ResolvingDecoder;
+import org.apache.avro.util.Either;
 import org.apache.avro.util.Utf8;
 import org.apache.avro.util.WeakIdentityHashMap;
 
@@ -264,7 +265,8 @@ public class GenericDatumReader<D> implements DatumReader<D> {
    * representations. By default, returns a GenericEnumSymbol.
    */
   protected Object readEnum(Schema expected, Decoder in) throws IOException {
-    return createEnum(expected.getEnumSymbols().get(in.readEnum()), expected);
+    Either<Integer, String> v = in.readEnum();
+    return v.map(i -> createEnum(expected.getEnumSymbols().get(i), expected));
   }
 
   /**

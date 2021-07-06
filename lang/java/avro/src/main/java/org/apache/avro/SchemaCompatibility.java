@@ -289,8 +289,7 @@ public class SchemaCompatibility {
           return result.mergedWith(checkFixedSize(reader, writer, location));
         }
         case ENUM: {
-          result = result.mergedWith(checkSchemaNames(reader, writer, location));
-          return result.mergedWith(checkReaderEnumContainsAllWriterEnumSymbols(reader, writer, location));
+          return result.mergedWith(checkSchemaNames(reader, writer, location));
         }
         case RECORD: {
           result = result.mergedWith(checkSchemaNames(reader, writer, location));

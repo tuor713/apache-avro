@@ -26,6 +26,7 @@ import org.apache.avro.Schema;
 import org.apache.avro.io.parsing.Parser;
 import org.apache.avro.io.parsing.Symbol;
 import org.apache.avro.io.parsing.ValidatingGrammarGenerator;
+import org.apache.avro.util.Either;
 import org.apache.avro.util.Utf8;
 
 /**
@@ -36,7 +37,7 @@ import org.apache.avro.util.Utf8;
  * and configure.
  * <p/>
  * ValidatingDecoder is not thread-safe.
- * 
+ *
  * @see Decoder
  * @see DecoderFactory
  */
@@ -159,11 +160,11 @@ public class ValidatingDecoder extends ParsingDecoder implements Parser.ActionHa
   }
 
   @Override
-  public int readEnum() throws IOException {
+  public Either<Integer, String> readEnum() throws IOException {
     parser.advance(Symbol.ENUM);
     Symbol.IntCheckAction top = (Symbol.IntCheckAction) parser.popSymbol();
-    int result = in.readEnum();
-    if (result < 0 || result >= top.size) {
+    Either<Integer, String> result = in.readEnum();
+    if (result.isLeft() && (result.getLeft() < 0 || result.getLeft() >= top.size)) {
       throw new AvroTypeException("Enumeration out of range: max is " + top.size + " but received " + result);
     }
     return result;

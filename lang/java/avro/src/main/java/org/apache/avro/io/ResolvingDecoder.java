@@ -26,6 +26,7 @@ import org.apache.avro.AvroTypeException;
 import org.apache.avro.Schema;
 import org.apache.avro.io.parsing.ResolvingGrammarGenerator;
 import org.apache.avro.io.parsing.Symbol;
+import org.apache.avro.util.Either;
 import org.apache.avro.util.Utf8;
 
 /**
@@ -255,18 +256,22 @@ public class ResolvingDecoder extends ValidatingDecoder {
   }
 
   @Override
-  public int readEnum() throws IOException {
+  public Either<Integer, String> readEnum() throws IOException {
     parser.advance(Symbol.ENUM);
     Symbol.EnumAdjustAction top = (Symbol.EnumAdjustAction) parser.popSymbol();
-    int n = in.readEnum();
+    Either<Integer, String> v = in.readEnum();
+    if (v.isRight()) {
+      return v;
+    }
+    int n = v.getLeft();
     if (top.noAdjustments) {
-      return n;
+      return Either.ofLeft(n);
     }
     Object o = top.adjustments[n];
     if (o instanceof Integer) {
-      return (Integer) o;
+      return Either.ofLeft((Integer) o);
     } else {
-      throw new AvroTypeException((String) o);
+      return Either.ofRight((String) o);
     }
   }
 

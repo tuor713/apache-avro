@@ -27,6 +27,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 import org.apache.avro.Schema;
+import org.apache.avro.util.Either;
 import org.apache.avro.util.Utf8;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -389,7 +390,7 @@ public class TestValidatingIO {
           if (level == skipLevel) {
             vi.readEnum();
           } else {
-            assertEquals(msg, e, vi.readEnum());
+            assertEquals(msg, Either.ofLeft(e), vi.readEnum());
           }
         }
           break;

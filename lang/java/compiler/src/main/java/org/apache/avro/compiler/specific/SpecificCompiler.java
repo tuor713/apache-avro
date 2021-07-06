@@ -747,6 +747,14 @@ public class SpecificCompiler {
     return javaType(schema, true);
   }
 
+  public String javaSetType(Schema schema) {
+    if (schema.getType() == Schema.Type.ENUM) {
+      return mangle(schema.getFullName());
+    } else {
+      return javaType(schema);
+    }
+  }
+
   private String javaType(Schema schema, boolean checkConvertedLogicalType) {
     if (checkConvertedLogicalType) {
       String convertedLogicalType = getConvertedLogicalType(schema);
@@ -757,9 +765,10 @@ public class SpecificCompiler {
 
     switch (schema.getType()) {
     case RECORD:
-    case ENUM:
     case FIXED:
       return mangle(schema.getFullName());
+    case ENUM:
+      return "org.apache.avro.util.Either<" + mangle(schema.getFullName()) + ",String>";
     case ARRAY:
       return "java.util.List<" + javaType(schema.getElementType()) + ">";
     case MAP:
@@ -809,7 +818,11 @@ public class SpecificCompiler {
     if (conversion != null) {
       return conversion.adjustAndSetValue("this." + name, pname);
     }
-    return "this." + name + " = " + pname + ";";
+    if (schema.getType() == Schema.Type.ENUM) {
+      return "this." + name + " = org.apache.avro.util.Either.ofLeft(" + pname + ");";
+    } else {
+      return "this." + name + " = " + pname + ";";
+    }
   }
 
   /**
@@ -821,6 +834,14 @@ public class SpecificCompiler {
   @Deprecated
   public String javaUnbox(Schema schema) {
     return javaUnbox(schema, false);
+  }
+
+  public String javaUnboxSetter(Schema schema, boolean unboxNullToVoid) {
+    if (schema.getType() == Schema.Type.ENUM) {
+      return javaSetType(schema);
+    } else {
+      return javaUnbox(schema, unboxNullToVoid);
+    }
   }
 
   /**

@@ -150,7 +150,7 @@ static {
 #end
 #end
    */
-  public ${this.mangle($schema.getName())}(#foreach($field in $schema.getFields())${this.javaType($field.schema())} ${this.mangle($field.name())}#if($foreach.count < $schema.getFields().size()), #end#end) {
+  public ${this.mangle($schema.getName())}(#foreach($field in $schema.getFields())${this.javaSetType($field.schema())} ${this.mangle($field.name())}#if($foreach.count < $schema.getFields().size()), #end#end) {
 #foreach ($field in $schema.getFields())
     ${this.generateSetterCode($field.schema(), ${this.mangle($field.name())}, ${this.mangle($field.name())})}
 #end
@@ -250,7 +250,7 @@ static {
 #end
    * @param value the value to set.
    */
-  public void ${this.generateSetMethod($schema, $field)}(${this.javaUnbox($field.schema(), false)} value) {
+  public void ${this.generateSetMethod($schema, $field)}(${this.javaUnboxSetter($field.schema(), false)} value) {
     ${this.generateSetterCode($field.schema(), ${this.mangle($field.name(), $schema.isError())}, "value")}
   }
 #end
@@ -406,7 +406,7 @@ static {
       * @param value The value of '${this.mangle($field.name(), $schema.isError())}'.
       * @return This builder.
       */
-    public #if ($schema.getNamespace())$this.mangle($schema.getNamespace()).#end${this.mangle($schema.getName())}.Builder ${this.generateSetMethod($schema, $field)}(${this.javaUnbox($field.schema(), false)} value) {
+    public #if ($schema.getNamespace())$this.mangle($schema.getNamespace()).#end${this.mangle($schema.getName())}.Builder ${this.generateSetMethod($schema, $field)}(${this.javaUnboxSetter($field.schema(), false)} value) {
       validate(fields()[$field.pos()], value);
 #if (${this.hasBuilder($field.schema())})
       this.${this.mangle($field.name(), $schema.isError())}Builder = null;
@@ -633,7 +633,7 @@ $I    out.writeBytes(${var});
 #elseif ($s.Type.Name.equals("fixed"))
 $I    out.writeFixed(${var}.bytes(), 0, ${s.FixedSize});
 #elseif ($s.Type.Name.equals("enum"))
-$I    out.writeEnum(${var}.ordinal());
+$I    if (${var}.isLeft()) {out.writeEnum(${var}.getLeft().ordinal());} else { throw new org.apache.avro.AvroRuntimeException("Cannot serialize right enum value: " + ${var});}
 #else
 ## TODO -- singal a code-gen-time error
 #end
@@ -750,7 +750,7 @@ $I      ${var} = new ${this.javaType($s)}();
 $I    }
 $I    in.readFixed(${var}.bytes(), 0, ${s.FixedSize});
 #elseif ($s.Type.Name.equals("enum"))
-$I    $var = ${this.javaType($s)}.values()[in.readEnum()];
+$I    $var = in.readEnum().map(idx -> ${this.mangle($s.getFullName())}.values()[idx]);
 #else
 ## TODO -- singal a code-gen-time error
 #end

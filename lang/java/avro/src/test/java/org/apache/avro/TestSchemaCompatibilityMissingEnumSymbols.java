@@ -17,17 +17,16 @@
  */
 package org.apache.avro;
 
-import static org.apache.avro.TestSchemaCompatibility.validateIncompatibleSchemas;
 import static org.apache.avro.TestSchemas.*;
 
 import java.util.Arrays;
 
-import org.apache.avro.SchemaCompatibility.SchemaIncompatibilityType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class TestSchemaCompatibilityMissingEnumSymbols {
@@ -59,6 +58,8 @@ public class TestSchemaCompatibilityMissingEnumSymbols {
 
   @Test
   public void testTypeMismatchSchemas() throws Exception {
-    validateIncompatibleSchemas(reader, writer, SchemaIncompatibilityType.MISSING_ENUM_SYMBOLS, details, location);
+    SchemaCompatibility.SchemaPairCompatibility result = SchemaCompatibility.checkReaderWriterCompatibility(reader,
+        writer);
+    assertEquals(SchemaCompatibility.SchemaCompatibilityType.COMPATIBLE, result.getType());
   }
 }

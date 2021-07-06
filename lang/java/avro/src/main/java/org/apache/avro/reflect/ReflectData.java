@@ -36,6 +36,7 @@ import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.FixedSize;
 import org.apache.avro.specific.SpecificData;
 import org.apache.avro.util.ClassUtils;
+import org.apache.avro.util.Either;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -651,6 +652,8 @@ public class ReflectData extends SpecificData {
         Schema schema = Schema.createArray(createSchema(params[0], names));
         schema.addProp(CLASS_PROP, raw.getName());
         return schema;
+      } else if (Either.class.isAssignableFrom(raw)) { // Enum wrapped in either
+        return createSchema(params[0], names);
       }
     } else if ((type == Byte.class) || (type == Byte.TYPE)) {
       Schema result = Schema.create(Schema.Type.INT);

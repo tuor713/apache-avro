@@ -25,6 +25,13 @@
   }, {
     "name" : "h",
     "type" : [ "null", "string" ]
+  }, {
+    "name": "enumField",
+    "type": {
+      "type": "enum",
+      "name": "TestEnum",
+      "symbols": ["A", "B", "C"]
+    }
   } ]
 }
 

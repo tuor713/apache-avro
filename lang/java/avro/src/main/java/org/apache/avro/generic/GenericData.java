@@ -53,6 +53,7 @@ import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.io.FastReaderBuilder;
+import org.apache.avro.util.Either;
 import org.apache.avro.util.Utf8;
 import org.apache.avro.util.internal.Accessor;
 
@@ -981,7 +982,7 @@ public class GenericData {
 
   /** Called by the default implementation of {@link #instanceOf}. */
   protected boolean isEnum(Object datum) {
-    return datum instanceof GenericEnumSymbol;
+    return datum instanceof GenericEnumSymbol || datum instanceof Either;
   }
 
   /**
@@ -990,7 +991,16 @@ public class GenericData {
    * representations.
    */
   protected Schema getEnumSchema(Object enu) {
-    return ((GenericContainer) enu).getSchema();
+    if (enu instanceof Either) {
+      Either e = (Either) enu;
+      if (e.isLeft()) {
+        return getEnumSchema(e.getLeft());
+      } else {
+        throw new AvroRuntimeException("Cannot retrieve schema from right value: " + enu);
+      }
+    } else {
+      return ((GenericContainer) enu).getSchema();
+    }
   }
 
   /** Called by the default implementation of {@link #instanceOf}. */
@@ -1127,7 +1137,15 @@ public class GenericData {
       }
       return 0;
     case ENUM:
-      return s.getEnumOrdinal(o1.toString()) - s.getEnumOrdinal(o2.toString());
+      Either<?, String> either1 = o1 instanceof Either ? (Either) o1 : Either.ofLeft(o1);
+      Either<?, String> either2 = o2 instanceof Either ? (Either) o2 : Either.ofLeft(o2);
+      if (either1.isLeft() && either2.isLeft()) {
+        return s.getEnumOrdinal(either1.getLeft().toString()) - s.getEnumOrdinal(either2.getLeft().toString());
+      } else {
+        String sym1 = either1.isLeft() ? either1.getLeft().toString() : either1.getRight();
+        String sym2 = either2.isLeft() ? either2.getLeft().toString() : either2.getRight();
+        return sym1.compareTo(sym2);
+      }
     case ARRAY:
       Collection a1 = (Collection) o1;
       Collection a2 = (Collection) o2;

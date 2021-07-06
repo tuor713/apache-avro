@@ -52,6 +52,7 @@ import org.apache.avro.io.parsing.ResolvingGrammarGenerator;
 import org.apache.avro.reflect.ReflectionUtil;
 import org.apache.avro.specific.SpecificData;
 import org.apache.avro.specific.SpecificRecordBase;
+import org.apache.avro.util.Either;
 import org.apache.avro.util.Utf8;
 import org.apache.avro.util.WeakIdentityHashMap;
 import org.apache.avro.util.internal.Accessor;
@@ -488,12 +489,14 @@ public class FastReaderBuilder {
 
   private FieldReader createEnumReader(EnumAdjust action) {
     return reusingReader((reuse, decoder) -> {
-      int index = decoder.readEnum();
-      Object resultObject = action.values[index];
+      Either<Integer, String> index = decoder.readEnum();
+      if (index.isRight())
+        return index;
+      Object resultObject = action.values[index.getLeft()];
       if (resultObject == null) {
-        throw new AvroTypeException("No match for " + action.writer.getEnumSymbols().get(index));
+        return Either.ofRight(action.writer.getEnumSymbols().get(index.getLeft()));
       }
-      return resultObject;
+      return Either.ofLeft(resultObject);
     });
   }
 

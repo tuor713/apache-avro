@@ -63,7 +63,7 @@ public class TestSchemaCompatibilityEnumDefaults {
     datum.put("field1", new GenericData.EnumSymbol(writerSchema, "C"));
     GenericRecord decodedDatum = serializeWithWriterThenDeserializeWithReader(writerSchema, datum, readerSchema);
     // The A is the Enum fallback value.
-    assertEquals("A", decodedDatum.get("field1").toString());
+    assertEquals("Left{A}", decodedDatum.get("field1").toString());
   }
 
   @Test
@@ -77,7 +77,7 @@ public class TestSchemaCompatibilityEnumDefaults {
     GenericRecord datum = new GenericData.Record(writerSchema);
     datum.put("field1", new GenericData.EnumSymbol(writerSchema, "B"));
     GenericRecord decodedDatum = serializeWithWriterThenDeserializeWithReader(writerSchema, datum, readerSchema);
-    assertEquals("B", decodedDatum.get("field1").toString());
+    assertEquals("Left{B}", decodedDatum.get("field1").toString());
   }
 
   @Test
@@ -92,14 +92,11 @@ public class TestSchemaCompatibilityEnumDefaults {
     datum.put("field1", new GenericData.EnumSymbol(writerSchema, "C"));
     GenericRecord decodedDatum = serializeWithWriterThenDeserializeWithReader(writerSchema, datum, readerSchema);
     // The A is the Enum default, which is assigned since C is not in [A,B].
-    assertEquals("A", decodedDatum.get("field1").toString());
+    assertEquals("Left{A}", decodedDatum.get("field1").toString());
   }
 
   @Test
   public void testFieldDefaultNotAppliedForUnknownSymbol() throws Exception {
-    expectedException.expect(AvroTypeException.class);
-    expectedException.expectMessage("No match for C");
-
     Schema writerSchema = SchemaBuilder.record("Record1").fields().name("field1").type(ENUM1_ABC_SCHEMA).noDefault()
         .endRecord();
     Schema readerSchema = SchemaBuilder.record("Record1").fields().name("field1").type(ENUM1_AB_SCHEMA).withDefault("A")
@@ -107,7 +104,8 @@ public class TestSchemaCompatibilityEnumDefaults {
 
     GenericRecord datum = new GenericData.Record(writerSchema);
     datum.put("field1", new GenericData.EnumSymbol(writerSchema, "C"));
-    serializeWithWriterThenDeserializeWithReader(writerSchema, datum, readerSchema);
+    GenericRecord decodedDatum = serializeWithWriterThenDeserializeWithReader(writerSchema, datum, readerSchema);
+    assertEquals("Right{C}", decodedDatum.get("field1").toString());
   }
 
   private GenericRecord serializeWithWriterThenDeserializeWithReader(Schema writerSchema, GenericRecord datum,

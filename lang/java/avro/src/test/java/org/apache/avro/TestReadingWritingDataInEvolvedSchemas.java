@@ -34,6 +34,7 @@ import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.*;
+import org.apache.avro.util.Either;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -309,7 +310,7 @@ public class TestReadingWritingDataInEvolvedSchemas {
     Record record = defaultRecordWithSchema(writer, FIELD_A, new EnumSymbol(writer, "A"));
     byte[] encoded = encodeGenericBlob(record);
     Record decoded = decodeGenericBlob(ENUM_ABC_RECORD, writer, encoded);
-    assertEquals("A", decoded.get(FIELD_A).toString());
+    assertEquals("Left{A}", decoded.get(FIELD_A).toString());
   }
 
   @Test
@@ -318,17 +319,16 @@ public class TestReadingWritingDataInEvolvedSchemas {
     Record record = defaultRecordWithSchema(writer, FIELD_A, new EnumSymbol(writer, "A"));
     byte[] encoded = encodeGenericBlob(record);
     Record decoded = decodeGenericBlob(ENUM_AB_RECORD, writer, encoded);
-    assertEquals("A", decoded.get(FIELD_A).toString());
+    assertEquals("Left{A}", decoded.get(FIELD_A).toString());
   }
 
   @Test
   public void enumRecordWithExtendedSchemaCanNotBeReadIfNewValuesAreUsed() throws Exception {
-    expectedException.expect(AvroTypeException.class);
-    expectedException.expectMessage("No match for C");
     Schema writer = ENUM_ABC_RECORD;
     Record record = defaultRecordWithSchema(writer, FIELD_A, new EnumSymbol(writer, "C"));
     byte[] encoded = encodeGenericBlob(record);
-    decodeGenericBlob(ENUM_AB_RECORD, writer, encoded);
+    Record decoded = decodeGenericBlob(ENUM_AB_RECORD, writer, encoded);
+    assertEquals(Either.ofRight("C"), decoded.get(FIELD_A));
   }
 
   @Test

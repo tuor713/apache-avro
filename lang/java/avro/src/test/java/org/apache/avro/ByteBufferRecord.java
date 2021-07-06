@@ -17,12 +17,14 @@
  */
 package org.apache.avro;
 
+import org.apache.avro.util.Either;
+
 import java.nio.ByteBuffer;
 
 public class ByteBufferRecord {
 
   private ByteBuffer payload;
-  private TypeEnum tp;
+  private Either<TypeEnum, String> tp;
 
   public ByteBufferRecord() {
   }
@@ -35,12 +37,12 @@ public class ByteBufferRecord {
     this.payload = payload;
   }
 
-  public TypeEnum getTp() {
+  public Either<TypeEnum, String> getTp() {
     return tp;
   }
 
   public void setTp(TypeEnum tp) {
-    this.tp = tp;
+    this.tp = Either.ofLeft(tp);
   }
 
   @Override

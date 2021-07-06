@@ -28,6 +28,7 @@ import org.apache.avro.io.Decoder;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
+import org.apache.avro.util.Either;
 import org.apache.avro.util.Utf8;
 
 import org.junit.Assert;
@@ -36,6 +37,7 @@ import org.junit.Test;
 
 import org.apache.avro.specific.test.FullRecordV1;
 import org.apache.avro.specific.test.FullRecordV2;
+import org.apache.avro.specific.test.TestEnum;
 
 public class TestGeneratedCode {
 
@@ -50,8 +52,11 @@ public class TestGeneratedCode {
 
   @Test
   public void withoutSchemaMigration() throws IOException {
-    FullRecordV1 src = new FullRecordV1(true, 87231, 731L, 54.2832F, 38.321, "Hi there", null);
+    FullRecordV1 src = new FullRecordV1(true, 87231, 731L, 54.2832F, 38.321, "Hi there", null, TestEnum.A);
     Assert.assertTrue("Test schema must allow for custom coders.", ((SpecificRecordBase) src).hasCustomCoders());
+    Assert.assertEquals(Either.ofLeft(TestEnum.A), src.getEnumField());
+    src.setEnumField(TestEnum.B);
+    Assert.assertEquals(Either.ofLeft(TestEnum.B), src.getEnumField());
 
     ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
     Encoder e = EncoderFactory.get().directBinaryEncoder(out, null);
@@ -70,7 +75,7 @@ public class TestGeneratedCode {
   @Test
   public void withSchemaMigration() throws IOException {
     FullRecordV2 src = new FullRecordV2(true, 731, 87231, 38L, 54.2832F, "Hi there",
-        ByteBuffer.wrap(Utf8.getBytesFor("Hello, world!")));
+        ByteBuffer.wrap(Utf8.getBytesFor("Hello, world!")), TestEnum.A);
     Assert.assertTrue("Test schema must allow for custom coders.", ((SpecificRecordBase) src).hasCustomCoders());
 
     ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
@@ -84,7 +89,7 @@ public class TestGeneratedCode {
     DatumReader<FullRecordV1> r = (DatumReader<FullRecordV1>) MODEL.createDatumReader(V2S, V1S);
     FullRecordV1 dst = r.read(null, d);
 
-    FullRecordV1 expected = new FullRecordV1(true, 87231, 731L, 54.2832F, 38.0, null, "Hello, world!");
+    FullRecordV1 expected = new FullRecordV1(true, 87231, 731L, 54.2832F, 38.0, null, "Hello, world!", TestEnum.A);
     Assert.assertEquals(expected, dst);
   }
 }
